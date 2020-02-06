@@ -95,8 +95,10 @@ def get_or_insert_condicao_clima(previsao_item):
             CondicaoClimatica.nk_cond_climatica == cond['id']).first()
 
         if (not cond_clima_ref):
-            cond_clima_ref = CondicaoClimatica(
-                cond['id'], cond['main'], cond['description'])
+            cond_clima_ref = CondicaoClimatica(cond['id'], 
+                                               cond['main'], 
+                                               cond['description'], 
+                                               cond['icon'])
 
         lista_condicoes.append(cond_clima_ref)
     return lista_condicoes

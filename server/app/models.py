@@ -1,5 +1,6 @@
 from . import db
 
+
 class Pais(db.Model):
 
     __tablename__ = 'pais'
@@ -17,6 +18,7 @@ class Pais(db.Model):
 
     def __repr__(self):
         return f'Pais {self.sigla}'
+
 
 class Cidade(db.Model):
 
@@ -79,6 +81,7 @@ class Cidade(db.Model):
     def __repr__(self):
         return f'Cidade {self.nome}'
 
+
 class Previsao(db.Model):
 
     __tablename__ = 'previsao'
@@ -114,9 +117,12 @@ class Previsao(db.Model):
         self.cidade = cidade
         self.id_cidade = cidade.id
 
+
 PrevisaoCondicaoClima = db.Table('previsao_condicao_clima', db.Model.metadata,
-    db.Column('previsao_item_id', db.Integer, db.ForeignKey('previsao_item.id')),
-    db.Column('condicao_climatica_id', db.Integer, db.ForeignKey('condicao_climatica.id')))
+                                 db.Column('previsao_item_id', db.Integer,
+                                           db.ForeignKey('previsao_item.id')),
+                                 db.Column('condicao_climatica_id', db.Integer, db.ForeignKey('condicao_climatica.id')))
+
 
 class PrevisaoItem(db.Model):
 
@@ -152,7 +158,7 @@ class PrevisaoItem(db.Model):
                              nullable=False)
 
     umidade = db.Column(db.Integer,
-                         nullable=False)
+                        nullable=False)
 
     percent_nuvens = db.Column(db.Float,
                                nullable=False)
@@ -164,10 +170,10 @@ class PrevisaoItem(db.Model):
                                     nullable=False)
 
     vol_chuva_3h = db.Column(db.Float,
-                                 nullable=True)
-    
+                             nullable=True)
+
     vol_neve_3h = db.Column(db.Float,
-                                 nullable=True)                                 
+                            nullable=True)
 
     dt_hora_dados = db.Column(db.DateTime,
                               index=False,
@@ -185,7 +191,7 @@ class PrevisaoItem(db.Model):
                                 secondary=PrevisaoCondicaoClima)
 
     def __init__(self, dt_hora_previsao, temp_atual, sensacao_termica, temp_min, temp_max, pressao_atm, pressao_mar, pressao_solo, umidade, percent_nuvens,
-        veloc_vento, direcao_vento_graus, vol_chuva_3h, vol_neve_3h, dt_hora_dados, previsao):
+                 veloc_vento, direcao_vento_graus, vol_chuva_3h, vol_neve_3h, dt_hora_dados, previsao):
         self.dt_hora_previsao = dt_hora_previsao
         self.temp_atual = temp_atual
         self.sensacao_termica = sensacao_termica
@@ -204,17 +210,18 @@ class PrevisaoItem(db.Model):
         self.previsao = previsao
         self.id_previsao = previsao.id
 
+
 class CondicaoClimatica(db.Model):
 
     __tablename__ = 'condicao_climatica'
 
     id = db.Column(db.Integer,
                    primary_key=True)
-    
+
     nk_cond_climatica = db.Column(db.Integer,
-                   index=True,
-                   unique=True,
-                   nullable=False)
+                                  index=True,
+                                  unique=True,
+                                  nullable=False)
 
     grupo = db.Column(db.String(20),
                       nullable=False)
@@ -222,8 +229,11 @@ class CondicaoClimatica(db.Model):
     descricao = db.Column(db.String(100),
                           nullable=False)
 
-    def __init__(self, nk_cond_climatica, grupo, descricao):
+    icon = db.Column(db.String(3), 
+                    nullable=False)
+
+    def __init__(self, nk_cond_climatica, grupo, descricao, icon):
         self.nk_cond_climatica = nk_cond_climatica
         self.grupo = grupo
         self.descricao = descricao
-
+        self.icon = icon
