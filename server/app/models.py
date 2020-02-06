@@ -1,5 +1,23 @@
 from . import db
 
+class Pais(db.Model):
+
+    __tablename__ = 'pais'
+
+    id = db.Column(db.Integer,
+                   primary_key=True)
+
+    sigla = db.Column(db.String(2),
+                      index=True,
+                      unique=True,
+                      nullable=False)
+
+    def __init__(self, sigla):
+        self.sigla = sigla
+
+    def __repr__(self):
+        return f'Pais {self.sigla}'
+
 class Cidade(db.Model):
 
     __tablename__ = 'cidade'
@@ -60,26 +78,6 @@ class Cidade(db.Model):
 
     def __repr__(self):
         return f'Cidade {self.nome}'
-
-
-class Pais(db.Model):
-
-    __tablename__ = 'pais'
-
-    id = db.Column(db.Integer,
-                   primary_key=True)
-
-    sigla = db.Column(db.String(2),
-                      index=True,
-                      unique=True,
-                      nullable=False)
-
-    def __init__(self, sigla):
-        self.sigla = sigla
-
-    def __repr__(self):
-        return f'Pais {self.sigla}'
-
 
 class Previsao(db.Model):
 
