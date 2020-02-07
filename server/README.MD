@@ -5,4 +5,4 @@ Necessário Instalar:
 python -m venv .venv
 pip install pipenv
 
-pipenv install flask, sqlalchemy, flask_sqlalchemy, psycopg2
+pipenv install flask, sqlalchemy, flask_sqlalchemy, psycopg2, flask_cors

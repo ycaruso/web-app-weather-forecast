@@ -1,24 +1,39 @@
-import requests
 from .models import db, Cidade, Previsao, PrevisaoItem, CondicaoClimatica, Pais
 from datetime import datetime
 
+
 # ------------------------------------------------------------------------------------
-# Api get previsoes do tempo
+# Realiza consulta bruta SQL para retornar as consultas
+# ------------------------------------------------------------------------------------
+def get_all_consultas_previsao():
+    res = db.session.execute("""
+        select p.id, p.dt_hora_consulta,  
+        c.nome,
+        pa.sigla,
+        c.populacao,
+        c.fuso_horario,
+        c.dt_nascer_sol,
+        c.dt_por_sol
+        from previsao as p
+        left join cidade as c on (c.id=p.id_cidade)
+        left join pais as pa on (pa.id=c.id_pais)
+    """,{})
+    return res
+    
+
+# ------------------------------------------------------------------------------------
+# Realiza o cadastro da consulta previsao tempo completa
 # ------------------------------------------------------------------------------------
 
+def insert_consulta_previsao(res):
 
-def get_previsoes_tempo(municipio, pais):
+    pais_ref = get_or_insert_pais(res['city']['country'])
 
-    url = "http://api.openweathermap.org/data/2.5/forecast"
+    cidade_ref = get_or_insert_cidade(res, pais_ref)
 
-    payload = {'APPID': 'cb1842be7097fc1a1387f33cb076f453',
-               'q': f"{municipio},{pais}",
-               'units': 'metric',
-               'lang': 'pt_br'}
-
-    response = requests.get(url, params=payload)
-
-    return response.json()
+    previsao_ref = insert_previsao(res, cidade_ref)
+    
+    insert_previsao_itens(res, previsao_ref)
 
 # ------------------------------------------------------------------------------------
 # Cria Ou Obtem Pais Cadastrado
@@ -42,10 +57,10 @@ def get_or_insert_pais(sigla_pais):
 # ------------------------------------------------------------------------------------
 
 
-def get_or_insert_cidade(res, nome_cidade, pais_ref):
+def get_or_insert_cidade(res, pais_ref):
 
     cidade_ref = db.session.query(Cidade).filter(
-        Cidade.nome == nome_cidade).first()
+        Cidade.nome == res['city']['name']).first()
 
     if (not cidade_ref):
 
