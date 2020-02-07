@@ -1,77 +1,72 @@
-import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import CameraIcon from '@material-ui/icons/PhotoCamera';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
+import React from "react";
+import AppBar from "@material-ui/core/AppBar";
+import Button from "@material-ui/core/Button";
+import WbSunnyIcon from "@material-ui/icons/WbSunny";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Grid from "@material-ui/core/Grid";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+
+import { useHistory } from "react-router-dom";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Yuri Caruso
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
+      {"Copyright © "} {"Yuri Caruso "} {new Date().getFullYear()}
+      {"."}
     </Typography>
   );
 }
 
 const useStyles = makeStyles(theme => ({
   icon: {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(2)
+  },
+  html: {
+    height: "100%"
+  },
+  body: {
+    margin: 0,
+    minHeight: "100vh",
+    display: "flex",
+    flexDirection: "column"
   },
   heroContent: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(8, 0, 6),
-  },
-  heroButtons: {
-    marginTop: theme.spacing(4),
-  },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
-  },
-  cardContent: {
-    flexGrow: 1,
+    backgroundColor: "#f7f7f7",
+    // padding: theme.spacing(4, 10, 6),
+    flex: "1 0 auto",
+    padding: 20
   },
   footer: {
     backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(6),
+    // padding: theme.spacing(3),
+    flexShrink: 0,
+    padding: 20
   },
+  heroButtons: {
+    marginTop: theme.spacing(4)
+  }
 }));
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-export default function Home() {
+function Home() {
   const classes = useStyles();
+
+  let history = useHistory();
+
+  const handlerLink = path => {
+    history.push({ pathname: path });
+  };
 
   return (
     <React.Fragment>
       <CssBaseline />
       <AppBar position="relative">
         <Toolbar>
-          <CameraIcon className={classes.icon} />
+          <WbSunnyIcon className={classes.icon} />
           <Typography variant="h6" color="inherit" noWrap>
-            Album layout
+            App Previsão Tempo
           </Typography>
         </Toolbar>
       </AppBar>
@@ -79,30 +74,47 @@ export default function Home() {
         {/* Hero unit */}
         <div className={classes.heroContent}>
           <Container maxWidth="sm">
-            <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-              Album layout
+            <Typography
+              component="h1"
+              variant="h2"
+              align="center"
+              color="textPrimary"
+              gutterBottom
+            >
+              App Previsão do Tempo
             </Typography>
-            <Typography variant="h5" align="center" color="textSecondary" paragraph>
-              Something short and leading about the collection below—its contents, the creator, etc.
-              Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-              entirely.
+            <Typography
+              variant="h5"
+              align="center"
+              color="textSecondary"
+              paragraph
+            >
+              Faça previsões por Cidade e País e veja quais as codições
+              climáticas para os próximos 5 dias.
             </Typography>
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justify="center">
                 <Grid item>
-                  <Button variant="contained" color="primary">
-                    Main call to action
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      handlerLink("/consulta");
+                    }}
+                  >
+                    Consultar Previsão
                   </Button>
                 </Grid>
                 <Grid item>
-                  <Button variant="outlined" color="primary">
-                    Secondary action
+                  <Button variant="contained" color="primary">
+                    Visualizar Histórico
                   </Button>
                 </Grid>
               </Grid>
             </div>
           </Container>
         </div>
+        <Container maxWidth="md"></Container>
       </main>
       {/* Footer */}
       <footer className={classes.footer}>
@@ -112,3 +124,5 @@ export default function Home() {
     </React.Fragment>
   );
 }
+
+export default Home;
