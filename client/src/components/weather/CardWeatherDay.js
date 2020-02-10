@@ -1,5 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import moment from 'moment';
+import "moment/locale/pt-br";
 
 import { Paper, Typography, Grid, IconButton } from '@material-ui/core';
 
@@ -14,30 +16,33 @@ const useStyles = makeStyles(theme => ({
         width: 150,
         height: 180
     },
-    weatherDayIcon: {
+    CardWeatherDayIcon: {
         width: 70,
         // display: 'block',
         margin: 0
     }
 }));
 
-
-export default function WeatherDay( { dia_semana, icon, temp, condicao_clima } ) {
+export default function CardWeatherDay( { dia_semana, icon, temp, condicao_clima, onCardWeatherDayClick } ) {
 
     const classes = useStyles();
+
+    function handleClick() {
+        onCardWeatherDayClick(dia_semana);
+    }
 
     return (
         <Paper component="form" className={classes.root}>
             <Grid container justify="center" alignItems="center" direction="row">
                 <Typography component="h6" variant="h6" align="center" style={{ margin: 0 }} color="textPrimary">
-                    {dia_semana}
+                    {moment(dia_semana).format("dddd").split("-")[0]}
                 </Typography>
                 <Grid item align="center" xs={12}>
                     <img
                         src={`/images/${icon}.svg`}
                         sizes={12}
                         alt="Weather icon"
-                        className={classes.weatherDayIcon}
+                        className={classes.CardWeatherDayIcon}
                     />
                 </Grid>
                 <Grid item align="center" xs={12}>
@@ -51,7 +56,7 @@ export default function WeatherDay( { dia_semana, icon, temp, condicao_clima } )
                     </Typography>
                 </Grid>
                 <Grid item align="center" xs={12}>
-                    <IconButton size='small'>
+                    <IconButton size='small' onClick={handleClick}>
                         <ExpandMoreIcon />
                     </IconButton>
                 </Grid>

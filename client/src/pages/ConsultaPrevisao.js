@@ -1,26 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import SearchBar from "../components/layout/SearchBar";
-import WeatherDay from "../components/weather/WeatherDay";
+import CardWeatherDay from "../components/weather/CardWeatherDay";
 import DetailWeatherDay from "../components/weather/DetailWeatherDay";
-
 import previsaoService from "../services/previsaoService";
 import previsaoOWMService from "../services/previsaoOWMService";
 import TopBar from "../components/layout/TopBar";
 import DetailWeatherCity from "../components/weather/DetailWeatherCity";
+import Footer from "../components/layout/Footer";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © Yuri Caruso "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const _Swal = withReactContent(Swal)
+
+
 
 const useStyles = makeStyles(theme => ({
   html: {
@@ -37,49 +33,47 @@ const useStyles = makeStyles(theme => ({
     flex: "1 0 auto",
     padding: 20
   },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    flexShrink: 0,
-    padding: 20
-  },
+
   //WeatherDIa
   root: {
-    flexGrow: 1,
-    marginTop: 15
+    marginTop: 20
   }
 }));
 
 export default function ConsultaPrevisao() {
   const classes = useStyles();
 
-  const [val, setVal] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [res, setRes] = useState({});
   const [data5Dias, setdata5Dias] = useState([]);
-  const [dataCity, setDataCity] = useState('');
+  const [dataCity, setDataCity] = useState("");
+  const [dataDetalheDia, setDataDetalheDia] = useState([]);
 
-  async function handleSearchBarClick(value) {
-    setVal(value);
-    let res = await previsaoOWMService.getPrevisoesOWM(value);
+  async function handleSearchBarClick(cidade) {
+    setCidade(cidade);
+    let res = await previsaoOWMService.getPrevisoesOWM(cidade);
+    setRes(res);
     if (res.msg === "sucesso") {
-      //transforma para dados resumidos
-      let data5Dias = previsaoOWMService.makeDataPrevisao5Dias(res.data);
-      setdata5Dias(data5Dias);
+      // Informações da cidade
       let dataCity = previsaoOWMService.makeDataCity(res.data);
       setDataCity(dataCity);
-      console.log(dataCity);
-
+      // Informações dia da semana
+      let data5Dias = previsaoOWMService.makeDataPrevisao5Dias(res.data);
+      setdata5Dias(data5Dias);
       previsaoService.salvarConsultaPrevisao(res.data);
     } else {
-      console.log("Erro na api");
+      _Swal.fire({
+        icon: 'error',
+        text: res.err,
+      })
     }
   }
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     let ret = await previsaoService.salvarConsultaPrevisao("");
-  //     console.log(ret);
-  //   }
-  //   fetchData();
-  // }, []);
+  function handleCardWeatherDayClick(dia) {
+    // Gera Informações detalhes do dia
+    let dataDetalheDia = previsaoOWMService.makeDataDetalheDia(res.data, dia);
+    setDataDetalheDia(dataDetalheDia);
+  }
 
   return (
     <div className={classes.html}>
@@ -100,31 +94,36 @@ export default function ConsultaPrevisao() {
               </Typography>
             </Grid>
             <Grid>
-              <SearchBar value={val} onSearchBarClick={handleSearchBarClick} />
+              <SearchBar
+                value={cidade}
+                onSearchBarClick={handleSearchBarClick}
+              />
             </Grid>
           </Grid>
 
-          {dataCity && 
+          {dataCity && (
             <Grid item align="center">
               <DetailWeatherCity
                 cidade={dataCity.cidade}
+                dt={dataCity.dt}
                 weather={dataCity.weather}
                 horaSol={dataCity.horaSol}
                 temp={dataCity.temp}
               />
             </Grid>
-          }
-          {data5Dias && (
-            <Grid container className={classes.root} spacing={2}>
+          )}
+          {data5Dias && data5Dias.length > 0 && (
+            <Grid container className={classes.root}>
               <Grid item xs={12}>
                 <Grid container justify="center" spacing={2}>
                   {data5Dias.map((data, i) => (
                     <Grid key={i} item>
-                      <WeatherDay
+                      <CardWeatherDay
                         dia_semana={data.dia_semana}
                         icon={data.icon}
                         temp={data.temp}
                         condicao_clima={data.condicao_clima}
+                        onCardWeatherDayClick={handleCardWeatherDayClick}
                       />
                     </Grid>
                   ))}
@@ -133,14 +132,14 @@ export default function ConsultaPrevisao() {
             </Grid>
           )}
 
-          <Grid container className={classes.root} justify="center">
-            <DetailWeatherDay />
-          </Grid>
+          {dataDetalheDia && dataDetalheDia.length > 0 && (
+            <Grid container className={classes.root} justify="center">
+              <DetailWeatherDay dataDetalheDia={dataDetalheDia} />
+            </Grid>
+          )}
         </div>
       </main>
-      <footer className={classes.footer}>
-        <Copyright />
-      </footer>
+      <Footer />
     </div>
   );
 }

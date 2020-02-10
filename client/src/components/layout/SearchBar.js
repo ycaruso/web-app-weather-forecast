@@ -26,7 +26,7 @@ export default function SearchBar({ value, onSearchBarClick }) {
 
   const [inputVal, setInputVal] = useState("");
 
-  function handleClick(event) {
+  function handleClick() {
     onSearchBarClick(inputVal);
   }
 

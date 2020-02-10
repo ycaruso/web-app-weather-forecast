@@ -8,6 +8,7 @@ import "moment/locale/pt-br";
 
 const useStyles = makeStyles(theme => ({
   paper: {
+    width: 980,
     marginTop: 20,
     padding: 0
   },
@@ -27,6 +28,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function DetailWeatherCity({
   cidade,
+  dt,
   weather,
   horaSol,
   temp
@@ -94,10 +96,10 @@ export default function DetailWeatherCity({
 
         <Grid item>
           <Typography align="left" color="textPrimary" className={classes.data}>
-            {moment().format("LLLL")}
+            {dt}
           </Typography>
         </Grid>
-        <Grid item align="left" justify="center">
+        <Grid item align="left">
           <Grid container direction="column" alignItems="center">
             <FiSunrise size={20} title="Nascer do Sol" />
             <Typography className={classes.hora}>
@@ -106,7 +108,7 @@ export default function DetailWeatherCity({
           </Grid>
         </Grid>
 
-        <Grid item align="left" justify="center">
+        <Grid item align="left">
           <Grid container direction="column" alignItems="center">
             <FiSunset size={20} title="Por do Sol" />
             <Typography className={classes.hora}>
