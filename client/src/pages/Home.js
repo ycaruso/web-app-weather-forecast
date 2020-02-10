@@ -1,15 +1,12 @@
 import React from "react";
-import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
-import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
-import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-
 import { useHistory } from "react-router-dom";
+import TopBar from "../components/layout/TopBar";
 
 function Copyright() {
   return (
@@ -35,13 +32,11 @@ const useStyles = makeStyles(theme => ({
   },
   heroContent: {
     backgroundColor: "#f7f7f7",
-    // padding: theme.spacing(4, 10, 6),
     flex: "1 0 auto",
     padding: 20
   },
   footer: {
     backgroundColor: theme.palette.background.paper,
-    // padding: theme.spacing(3),
     flexShrink: 0,
     padding: 20
   },
@@ -52,7 +47,6 @@ const useStyles = makeStyles(theme => ({
 
 function Home() {
   const classes = useStyles();
-
   let history = useHistory();
 
   const handlerLink = path => {
@@ -62,14 +56,7 @@ function Home() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <WbSunnyIcon className={classes.icon} />
-          <Typography variant="h6" color="inherit" noWrap>
-            App Previsão Tempo
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <TopBar />
       <main>
         {/* Hero unit */}
         <div className={classes.heroContent}>
@@ -114,7 +101,6 @@ function Home() {
             </div>
           </Container>
         </div>
-        <Container maxWidth="md"></Container>
       </main>
       {/* Footer */}
       <footer className={classes.footer}>

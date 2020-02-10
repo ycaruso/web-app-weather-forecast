@@ -29,7 +29,7 @@ export default function WeatherDay( { dia_semana, icon, temp, condicao_clima } )
     return (
         <Paper component="form" className={classes.root}>
             <Grid container justify="center" alignItems="center" direction="row">
-                <Typography component="h6" variant="h6" align="center" style={{ margin: 0 }} color="textPrimary" gutterBottom>
+                <Typography component="h6" variant="h6" align="center" style={{ margin: 0 }} color="textPrimary">
                     {dia_semana}
                 </Typography>
                 <Grid item align="center" xs={12}>
@@ -41,12 +41,12 @@ export default function WeatherDay( { dia_semana, icon, temp, condicao_clima } )
                     />
                 </Grid>
                 <Grid item align="center" xs={12}>
-                    <Typography component="h7" variant="h7" align="center" color="textPrimary" gutterBottom>
+                    <Typography style={{ fontSize: 14 }} align="center" color="textPrimary">
                         {temp}º
                     </Typography>
                 </Grid>
                 <Grid item align="center" xs={12}>
-                    <Typography component="h8" variant="h8" align="center" color="textPrimary" gutterBottom>
+                    <Typography style={{ fontSize: 16 }} align="center" color="textPrimary">
                         {condicao_clima}
                     </Typography>
                 </Grid>

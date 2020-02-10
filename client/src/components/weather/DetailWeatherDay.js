@@ -7,8 +7,7 @@ import {
   Grid,
   List,
   ListItem,
-  ListItemText,
-  ListItemIcon
+  ListItemText
 } from "@material-ui/core";
 
 import { Divider } from "@material-ui/core";
@@ -20,16 +19,24 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center",
     justifyContent: "center",
     width: 980,
-    height: 300
+    height: 300,
+    minWidth: 20
   },
   weatherIcon: {
-    width: 60,
+    width: 38,
     // display: 'block',
     margin: 0
   },
   weatherIconList: {
     width: 20,
     margin: 0
+  },
+  listItemText: {
+    fontSize: "1em"
+  },
+  listItemTitulo: {
+    fontSize: "1.2em",
+    fontWeight: 600
   }
 }));
 
@@ -46,25 +53,9 @@ export default function DetailWeatherDay() {
           style={{ margin: 12 }}
           direction="row"
         >
-          <Grid item align="center" xs={12}>
-            <Typography
-              align="left"
-              style={{ fontSize: 16 }}
-              color="textPrimary"
-              gutterBottom
-            >
-              Previsão Cianorte, BR
-            </Typography>
-          </Grid>
-
           <Grid container>
             <Grid item xs={12}>
-              <Grid
-                container
-                justify="flex-start"
-                alignItems="center"
-                spacing={4}
-              >
+              <Grid container justify="center" alignItems="center" spacing={2}>
                 <Grid item>
                   <img
                     src={`/images/01d.svg`}
@@ -75,12 +66,9 @@ export default function DetailWeatherDay() {
                 </Grid>
                 <Grid item>
                   <Typography
-                    component="h3"
-                    variant="h3"
                     align="center"
-                    style={{ margin: 0 }}
+                    style={{ fontSize: 32, fontWeight: 400, margin: 0 }}
                     color="textPrimary"
-                    gutterBottom
                   >
                     26º
                   </Typography>
@@ -89,261 +77,131 @@ export default function DetailWeatherDay() {
             </Grid>
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item align="center" xs={12}>
             <Typography
               align="left"
-              style={{ fontSize: 16 }}
+              style={{ fontSize: 20, fontWeight: 400 }}
               color="textPrimary"
-              gutterBottom
             >
-              Segunda, 24 Nov 16:21
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography
-              align="left"
-              style={{ fontSize: 16 }}
-              color="textPrimary"
-              gutterBottom
-            >
-              Chuva: 1mm
+              Foz do Iguaçu, BR
             </Typography>
           </Grid>
 
           <Grid item xs={12}>
             <Typography
               align="left"
-              style={{ fontSize: 16 }}
+              style={{ fontSize: 14 }}
               color="textPrimary"
               gutterBottom
             >
-              Umidade: 89%
+              Seg, 24 Nov 16:21
             </Typography>
           </Grid>
 
           <Grid item xs={12}>
             <Typography
               align="left"
-              style={{ fontSize: 16 }}
+              style={{ fontSize: 14 }}
               color="textPrimary"
-              gutterBottom
             >
-              Vento: 10.9 km/h
+              20º - 25º
             </Typography>
           </Grid>
-
           <Grid item xs={12}>
             <Typography
               align="left"
-              style={{ fontSize: 16 }}
+              style={{ fontSize: 14 }}
               color="textPrimary"
-              gutterBottom
             >
-              Nuvens: 5%
+              Nascer do Sol 06:32
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography
+              align="left"
+              style={{ fontSize: 14 }}
+              color="textPrimary"
+            >
+              Por do Sol 18:35
             </Typography>
           </Grid>
         </Grid>
       </Grid>
       <Divider orientation="vertical" />
+
       <Grid container style={{ width: "80%" }}>
         <Grid item xs={12}>
-          <Grid container >
+          <Grid container>
             <Grid item>
               <List>
-                <ListItem style={{height:10}}>
-                  <ListItemIcon>
-                    <img
-                      src={`/images/01d.svg`}
-                      alt="Weather icon"
-                      className={classes.weatherIconList}
-                    />
-                  </ListItemIcon>
+                <ListItem style={{ height: 30 }}>
+                  <ListItemText
+                    classes={{ primary: classes.listItemTitulo }}
+                    style={{ textAlign: "center" }}
+                  >
+                    08:00
+                  </ListItemText>
                 </ListItem>
-                <ListItem style={{height:30}}>
-                  <ListItemText primary="Drafts" />
+                <ListItem
+                  style={{ height: 30, textAlign: "center", display: "block" }}
+                >
+                  <img
+                    src={`/images/01d.svg`}
+                    alt="Weather icon"
+                    className={classes.weatherIconList}
+                  />
                 </ListItem>
-                <ListItem style={{height:30}}>
-                  <ListItemText primary="Drafts" />
+                <ListItem style={{ height: 30 }}>
+                  <ListItemText
+                    classes={{ primary: classes.listItemText }}
+                    style={{ textAlign: "center" }}
+                    title="Temperatura"
+                  >
+                    26º
+                  </ListItemText>
                 </ListItem>
-                <ListItem style={{height:30}}>
-                  <ListItemText primary="Drafts" />
+                <ListItem style={{ height: 30 }}>
+                  <ListItemText
+                    classes={{ primary: classes.listItemText }}
+                    style={{ textAlign: "center" }}
+                    title="Precipitação"
+                  >
+                    4,01mm
+                  </ListItemText>
                 </ListItem>
-                <ListItem style={{height:30}}>
-                  <ListItemText primary="Drafts" />
+                <ListItem style={{ height: 30 }}>
+                  <ListItemText
+                    classes={{ primary: classes.listItemText }}
+                    style={{ textAlign: "center" }}
+                    title="Umidade"
+                  >
+                    85%
+                  </ListItemText>
                 </ListItem>
-                <ListItem style={{height:30}}>
-                  <ListItemText primary="Drafts" />
+                <ListItem style={{ height: 30 }}>
+                  <ListItemText
+                    classes={{ primary: classes.listItemText }}
+                    style={{ textAlign: "center" }}
+                    title="Vel. Vento"
+                  >
+                    9,22km/h
+                  </ListItemText>
                 </ListItem>
-                <ListItem style={{height:30}}>
-                  <ListItemText primary="Drafts" />
+                <ListItem style={{ height: 30 }}>
+                  <ListItemText
+                    classes={{ primary: classes.listItemText }}
+                    style={{ textAlign: "center" }}
+                    title="Perc. Nuvens"
+                  >
+                    1%
+                  </ListItemText>
                 </ListItem>
               </List>
             </Grid>
-            <Divider orientation="vertical" style={{ marginTop:20, height: 300}}/>
-            <Grid item>
-              <List>
-                <ListItem>
-                  <ListItemIcon>
-                    <img
-                      src={`/images/01d.svg`}
-                      sizes={12}
-                      alt="Weather icon"
-                      className={classes.weatherIconList}
-                    />
-                  </ListItemIcon>
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-              </List>
-            </Grid>
-            <Divider orientation="vertical" style={{ marginTop:20, height: 300}}/>
-            <Grid item>
-              <List>
-                <ListItem>
-                  <ListItemIcon>
-                    <img
-                      src={`/images/01d.svg`}
-                      sizes={12}
-                      alt="Weather icon"
-                      className={classes.weatherIconList}
-                    />
-                  </ListItemIcon>
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-              </List>
-            </Grid>
-            <Divider orientation="vertical" style={{ marginTop:20, height: 300}}/>
-            <Grid item>
-              <List>
-                <ListItem>
-                  <ListItemIcon>
-                    <img
-                      src={`/images/01d.svg`}
-                      sizes={12}
-                      alt="Weather icon"
-                      className={classes.weatherIconList}
-                    />
-                  </ListItemIcon>
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-              </List>
-            </Grid>
-            <Divider orientation="vertical" style={{ marginTop:20, height: 300}}/>
-            <Grid item>
-              <List>
-                <ListItem>
-                  <ListItemIcon>
-                    <img
-                      src={`/images/01d.svg`}
-                      sizes={12}
-                      alt="Weather icon"
-                      className={classes.weatherIconList}
-                    />
-                  </ListItemIcon>
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-              </List>
-            </Grid>
-            <Divider orientation="vertical" style={{ marginTop:20, height: 300}}/>
-            <Grid item>
-              <List>
-                <ListItem>
-                  <ListItemIcon>
-                    <img
-                      src={`/images/01d.svg`}
-                      sizes={12}
-                      alt="Weather icon"
-                      className={classes.weatherIconList}
-                    />
-                  </ListItemIcon>
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
-              </List>
-            </Grid>
+            <Divider
+              orientation="horizontal"
+              style={{ height: 230, width: 1, backgroundColor: "#e0e0e0" }}
+            />
           </Grid>
         </Grid>
       </Grid>

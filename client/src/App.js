@@ -1,8 +1,8 @@
 import React from "react";
 import "./App.css";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ConsultaPrevisao from "./pages/ConsultaPrevisao";
 import Home from "./pages/Home";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 function App() {
   return (
