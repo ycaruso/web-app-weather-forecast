@@ -56,14 +56,23 @@ export default function HistoricoConsulta() {
   const [data5Dias, setData5Dias] = useState([]);
   const [dataDetalheDia, setDataDetalheDia] = useState([]);
   const [loading, SetLoading] = useState(false);
+  const [noData, setNoData] = useState(false);
 
   const fetchData = useCallback(async () => {
     SetLoading(true);
-    const { data } = await previsaoService.obterTodasConsultasPrevisao();
+    try {
+      const { data } = await previsaoService.obterTodasConsultasPrevisao();
+      setHistorico(data.data);
+    } catch (err) {
+      // no data
+      setNoData(true);
+    }
     SetLoading(false);
-    setHistorico(data.data);
   }, []);
 
+  /**
+   * Ao iniciar a pagina já carrega os dados da Table
+   */
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -89,6 +98,16 @@ export default function HistoricoConsulta() {
     setDataDetalheDia(dataDetalheDia);
   }
 
+  function componentNoData() {
+    return (
+      <div>
+        <Typography align="center" style={{width: "100%"}}>
+          Não existe consulta de previsões.
+        </Typography>
+      </div>
+    );
+  }
+
   return (
     <div className={classes.html}>
       <CssBaseline />
@@ -107,13 +126,15 @@ export default function HistoricoConsulta() {
                 Histórico de Consultas Previsão Tempo
               </Typography>
             </Grid>
-            <FadeLoader
-              css={override}
-              size={150}
-              //size={"150px"} this also works
-              color={"#3F51B5"}
-              loading={loading}
-            />
+            {/* {loading ? (
+              <FadeLoader
+                css={override}
+                size={150}
+                //size={"150px"} this also works
+                color={"#3F51B5"}
+                loading={loading}
+              />
+            ) : ( */}
             <TableContainer className={classes.table} component={Paper}>
               <Table size="small" aria-label="a dense table">
                 <TableHead>
@@ -127,10 +148,9 @@ export default function HistoricoConsulta() {
                     <TableCell align="right">Por do Sol</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  {historico &&
-                    historico.length > 0 &&
-                    historico.map(row => (
+                {historico && !noData && historico.length > 0 ? (
+                  <TableBody>
+                    {historico.map(row => (
                       <TableRow key={row.id}>
                         <TableCell component="th" scope="row">
                           <Link
@@ -141,22 +161,29 @@ export default function HistoricoConsulta() {
                           </Link>
                         </TableCell>
                         <TableCell align="right">
-                          {moment(row.dt_hora_consulta).format(
-                            "DD/MM/YYYY HH:mm"
-                          )}
+                          {moment(row.dt_hora_consulta)
+                            .utc()
+                            .format("DD/MM/YYYY HH:mm")}
                         </TableCell>
                         <TableCell align="right">{row.cidade}</TableCell>
                         <TableCell align="right">{row.pais}</TableCell>
                         <TableCell align="right">{row.populacao}</TableCell>
                         <TableCell align="right">
-                          {moment(row.dt_nascer_sol).format("HH:mm")}
+                          {moment(row.dt_nascer_sol)
+                            .utc()
+                            .format("HH:mm")}
                         </TableCell>
                         <TableCell align="right">
-                          {moment(row.dt_por_sol).format("HH:mm")}
+                          {moment(row.dt_por_sol)
+                            .utc()
+                            .format("HH:mm")}
                         </TableCell>
                       </TableRow>
                     ))}
-                </TableBody>
+                  </TableBody>
+                ) : (
+                  componentNoData()
+                )}
               </Table>
             </TableContainer>
           </Grid>

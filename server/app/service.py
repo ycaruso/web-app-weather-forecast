@@ -83,8 +83,9 @@ def get_all_consultas_previsao():
     
     resDict = resultProxyToDict(res)
 
+    # Se for vazio
     if (not resDict):
-        return ({ "msg": "Nenhuma consulta de previsão encontrada."})
+        return ({ "msg": "Nenhuma consulta de previsão encontrada." })
     else:
         return resDict
 

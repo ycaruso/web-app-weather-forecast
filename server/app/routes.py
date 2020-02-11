@@ -31,7 +31,7 @@ def previsao():
 def listar_todas_consultas_previsao():
     res = get_all_consultas_previsao()
     if ("msg" in res):
-        return jsonify(res), 400
+        return jsonify(res['msg']), 400
     else:
         return jsonify({'data': [dict(row) for row in res]}), 200
 
