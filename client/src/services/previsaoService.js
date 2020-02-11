@@ -21,7 +21,8 @@ const previsaoService = {
 
   async obterTodasConsultasPrevisao() {
     try {
-      const res = await apiPython.get("/api/previsao");
+      const res = await apiPython.get("/api/previsoes");
+      console.log(res.data);
       return { msg: "sucesso", data: res.data };
     } catch (err) {
       return { msg: "erro", err: err.response };

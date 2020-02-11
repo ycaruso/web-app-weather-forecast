@@ -93,7 +93,13 @@ function Home() {
                   </Button>
                 </Grid>
                 <Grid item>
-                  <Button variant="contained" color="primary">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      handlerLink("/historico");
+                    }}
+                  >
                     Visualizar Histórico
                   </Button>
                 </Grid>

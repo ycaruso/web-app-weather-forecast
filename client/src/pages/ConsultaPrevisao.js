@@ -12,11 +12,18 @@ import TopBar from "../components/layout/TopBar";
 import DetailWeatherCity from "../components/weather/DetailWeatherCity";
 import Footer from "../components/layout/Footer";
 
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-const _Swal = withReactContent(Swal)
+import { css } from "@emotion/core";
+import FadeLoader from "react-spinners/FadeLoader";
 
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+const _Swal = withReactContent(Swal);
 
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: #3F51B5;
+`;
 
 const useStyles = makeStyles(theme => ({
   html: {
@@ -48,11 +55,27 @@ export default function ConsultaPrevisao() {
   const [data5Dias, setdata5Dias] = useState([]);
   const [dataCity, setDataCity] = useState("");
   const [dataDetalheDia, setDataDetalheDia] = useState([]);
+  const [loading, SetLoading] = useState(false);
 
   async function handleSearchBarClick(cidade) {
     setCidade(cidade);
     let res = await previsaoOWMService.getPrevisoesOWM(cidade);
     setRes(res);
+    SetLoading(true);
+    let result = await previsaoService.salvarConsultaPrevisao(res.data);
+    SetLoading(false);
+    if (result.err) {
+      _Swal.fire({
+        icon: "error",
+        text: result.err.data.msg
+      });
+    } else {
+      _Swal.fire({
+        icon: "success",
+        text: result.data.msg
+      });
+    }
+    // console.log(result);
     if (res.msg === "sucesso") {
       // Informações da cidade
       let dataCity = previsaoOWMService.makeDataCity(res.data);
@@ -60,12 +83,11 @@ export default function ConsultaPrevisao() {
       // Informações dia da semana
       let data5Dias = previsaoOWMService.makeDataPrevisao5Dias(res.data);
       setdata5Dias(data5Dias);
-      previsaoService.salvarConsultaPrevisao(res.data);
     } else {
       _Swal.fire({
-        icon: 'error',
-        text: res.err,
-      })
+        icon: "error",
+        text: res.err
+      });
     }
   }
 
@@ -100,6 +122,14 @@ export default function ConsultaPrevisao() {
               />
             </Grid>
           </Grid>
+
+          <FadeLoader
+            css={override}
+            size={150}
+            //size={"150px"} this also works
+            color={"#3F51B5"}
+            loading={loading}
+          />
 
           {dataCity && (
             <Grid item align="center">

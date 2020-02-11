@@ -1,6 +1,5 @@
 from . import db
 
-
 class Pais(db.Model):
 
     __tablename__ = 'pais'
@@ -43,7 +42,7 @@ class Cidade(db.Model):
                           nullable=False)
 
     populacao = db.Column(db.Integer,
-                          nullable=False)
+                          nullable=True)
 
     fuso_horario = db.Column(db.Integer,
                              nullable=False)
