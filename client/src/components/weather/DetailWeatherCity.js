@@ -40,7 +40,7 @@ export default function DetailWeatherCity({
       <Fragment>
         <Grid item align="left">
           <Grid container direction="row" alignItems="center">
-            <FaTemperatureLow size={20} title="Tempatura Min" />
+            <FaTemperatureLow size={20} title="Temperatura Min" />
             <Typography className={classes.hora}>
               {temp.tempMin.toFixed(0)}º
             </Typography>
@@ -49,7 +49,7 @@ export default function DetailWeatherCity({
 
         <Grid item align="left">
           <Grid container direction="row" alignItems="center">
-            <FaTemperatureHigh size={20} title="Tempatura Max" />
+            <FaTemperatureHigh size={20} title="Temperatura Max" />
             <Typography className={classes.hora}>
               {temp.tempMax.toFixed(0)}º
             </Typography>
@@ -79,7 +79,7 @@ export default function DetailWeatherCity({
         </Grid>
         <Grid item>
           <Typography align="left" color="textPrimary" className={classes.temp}>
-            {temp.temp.toFixed(0)}º
+            {/* {temp.temp.toFixed(0)}º */}
           </Typography>
         </Grid>
 

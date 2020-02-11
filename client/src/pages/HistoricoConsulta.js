@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 import TopBar from "../components/layout/TopBar";
@@ -13,33 +13,62 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import previsaoService from "../services/previsaoService";
+import moment from "moment";
+import { Link } from "@material-ui/core";
+import previsaoOWMService from "../services/previsaoOWMService";
+import DetailWeatherCity from "../components/weather/DetailWeatherCity";
+import CardWeatherDay from "../components/weather/CardWeatherDay";
+import DetailCardWeatherDay from "../components/weather/DetailWeatherDay";
 
 const useStyles = makeStyles({
   body: {
     marginTop: 20
   },
-
   table: {
     minWidth: 780,
     width: 780
   }
 });
 
-// https://blog.logrocket.com/react-hooks-cheat-sheet-unlock-solutions-to-common-problems-af4caf699e70/
-
 export default function HistoricoConsulta() {
   const classes = useStyles();
-  const [historico, setHistorico] = useState([]);
 
-  const fetchData = async () => {
-    const data = await previsaoService.obterTodasConsultasPrevisao();
+  const [historico, setHistorico] = useState([]);
+  const [res, setRes] = useState([]);
+  const [dataCity, setDataCity] = useState("");
+  const [data5Dias, setData5Dias] = useState([]);
+  const [dataDetalheDia, setDataDetalheDia] = useState([]);
+
+  const fetchData = useCallback(async () => {
+    const { data } = await previsaoService.obterTodasConsultasPrevisao();
     setHistorico(data.data);
-    console.log(historico);
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
+
+  useEffect(() => {
+    console.log(dataCity);
+  }, [dataCity]);
+
+  async function showDetail(rowid) {
+    console.log(rowid);
+    const res = await previsaoService.obterDetalhesConsultaPorId(rowid);
+    setRes(res);
+    let dtCity = previsaoOWMService.makeDataCity(res.data);
+    console.log(dtCity);
+    setDataCity(dtCity);
+    // let data5Dias = previsaoOWMService.makeDataPrevisao5Dias(res.data);
+    // setData5Dias(data5Dias);
+    // console.log(data5Dias);
+  }
+
+  // function handleCardWeatherDayClick(dia) {
+  //   // Gera Informações detalhes do dia
+  //   let dataDetalheDia = previsaoOWMService.makeDataDetalheDia(res.data, dia);
+  //   setDataDetalheDia(dataDetalheDia);
+  // }
 
   return (
     <div className={classes.html}>
@@ -72,23 +101,72 @@ export default function HistoricoConsulta() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {historico && historico.map(row => (
-                  <TableRow key={row.id}>
-                    <TableCell component="th" scope="row">
-                      {row.id}
-                    </TableCell>
-                    <TableCell align="right">{row.dt_hora_consulta}</TableCell>
-                    <TableCell align="right">{row.cidade}</TableCell>
-                    <TableCell align="right">{row.pais}</TableCell>
-                    <TableCell align="right">{row.populacao}</TableCell>
-                    <TableCell align="right">{row.dt_nascer_sol}</TableCell>
-                    <TableCell align="right">{row.dt_por_sol}</TableCell>
-                  </TableRow>
-                ))}
+                {historico &&
+                  historico.length > 0 &&
+                  historico.map(row => (
+                    <TableRow key={row.id}>
+                      <TableCell component="th" scope="row">
+                        <Link href="#" onClick={() => showDetail(row.id)}>
+                          {row.id}
+                        </Link>
+                      </TableCell>
+                      <TableCell align="right">
+                        {moment(row.dt_hora_consulta).format(
+                          "DD/MM/YYYY HH:mm"
+                        )}
+                      </TableCell>
+                      <TableCell align="right">{row.cidade}</TableCell>
+                      <TableCell align="right">{row.pais}</TableCell>
+                      <TableCell align="right">{row.populacao}</TableCell>
+                      <TableCell align="right">
+                        {moment(row.dt_nascer_sol).format("HH:mm")}
+                      </TableCell>
+                      <TableCell align="right">
+                        {moment(row.dt_por_sol).format("HH:mm")}
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>
         </Grid>
+
+        {dataCity && (
+          <Grid item align="center">
+            <DetailWeatherCity
+              cidade={dataCity.cidade}
+              dt={dataCity.dt}
+              weather={dataCity.weather}
+              horaSol={dataCity.horaSol}
+              temp={dataCity.temp}
+            />
+          </Grid>
+        )}
+        {/* {data5Dias && data5Dias.length > 0 && (
+          <Grid container className={classes.root}>
+            <Grid item xs={12}>
+              <Grid container justify="center" spacing={2}>
+                {data5Dias.map((data, i) => (
+                  <Grid key={i} item>
+                    <CardWeatherDay
+                      dia_semana={data.dia_semana}
+                      icon={data.icon}
+                      temp={data.temp}
+                      condicao_clima={data.condicao_clima}
+                      onCardWeatherDayClick={handleCardWeatherDayClick}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+          </Grid>
+        )}
+
+        {dataDetalheDia && dataDetalheDia.length > 0 && (
+          <Grid container className={classes.root} justify="center">
+            <DetailCardWeatherDay dataDetalheDia={dataDetalheDia} />
+          </Grid>
+        )} */}
       </main>
       <Footer />
     </div>

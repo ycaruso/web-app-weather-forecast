@@ -18,7 +18,6 @@ const previsaoOWMService = {
   },
   makeDataCity(res) {
     if (!res || res.msg === "erro") return;
-
     let dados = {};
     dados.cidade = `${res.city.name}, ${res.city.country}`;
     dados.dt = moment.unix(res.list[0].dt).utcOffset(0).format("LLLL");

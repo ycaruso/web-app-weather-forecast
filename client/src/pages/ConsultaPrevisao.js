@@ -22,7 +22,7 @@ const _Swal = withReactContent(Swal);
 const override = css`
   display: block;
   margin: 0 auto;
-  border-color: #3F51B5;
+  border-color: #3f51b5;
 `;
 
 const useStyles = makeStyles(theme => ({
@@ -64,11 +64,13 @@ export default function ConsultaPrevisao() {
     SetLoading(true);
     let result = await previsaoService.salvarConsultaPrevisao(res.data);
     SetLoading(false);
-    if (result.err) {
+    if (result.msg === "erro") {
+      console.log(result);
       _Swal.fire({
         icon: "error",
-        text: result.err.data.msg
+        text: result.err.data !== "undefined" ? result.err.data.msg : result.err
       });
+      return;
     } else {
       _Swal.fire({
         icon: "success",
