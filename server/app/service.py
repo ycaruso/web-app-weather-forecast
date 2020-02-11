@@ -6,8 +6,6 @@ from sqlalchemy import exc
 def get_detalhes_consulta_previsao_by_id(id):
     res = db.session.execute(f"""
            select
-            p.id, 
-            p.dt_hora_consulta, 
             p.nro_linhas as cnt,
             c.nome as cidade,
             pa.sigla,
@@ -20,19 +18,25 @@ def get_detalhes_consulta_previsao_by_id(id):
             pit.umidade,
             pit.percent_nuvens,
             pit.veloc_vento,
-            pit.vol_chuva_3h
+            pit.vol_chuva_3h,
+            co.descricao,
+            co.icon
             FROM "public".previsao p
             left join previsao_item pit on (p.id=pit.id_previsao)
+            left join previsao_condicao_clima pc on (pc.previsao_item_id=pit.id)
+            left join condicao_climatica co on (co.id=pc.condicao_climatica_id)
             left join cidade c on (c.id=p.id_cidade)
             left join pais pa on (pa.id=c.id_pais)
             where p.id={id}
         """,{})
     
-    print(res)
-    
-    data = { dt: res.dt_hora_consulta }
-    print(data)
-    return res
+    resDict = resultProxyToDict(res)
+
+    if (not resDict):
+        return ({ "msg": "Nenhuma consulta de previsão encontrada."})
+    else:
+        return resDict
+
 
 # {
 #     "list": [
@@ -95,6 +99,7 @@ def insert_consulta_previsao(res):
     if (type(pais_ref) is dict and "error" in pais_ref):
         return pais_ref
 
+
     cidade_ref = get_or_insert_cidade(res, pais_ref)
     if (type(cidade_ref) is dict and "error" in cidade_ref):
         return cidade_ref
@@ -126,8 +131,8 @@ def get_or_insert_pais(sigla_pais):
             pais_ref = novo_pais
             db.session.add(novo_pais)
             db.session.commit()
-        else:
-            return pais_ref
+        
+        return pais_ref
     except exc.SQLAlchemyError as e:
         db.session.rollback()
         return ({ "msg": "Erro ao salvar pais.", "error": f"{e.__dict__['orig']}" })
