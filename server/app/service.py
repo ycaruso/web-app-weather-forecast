@@ -2,7 +2,6 @@ from .models import db, Cidade, Previsao, PrevisaoItem, CondicaoClimatica, Pais
 from datetime import datetime
 from sqlalchemy import exc
 
-
 def get_detalhes_consulta_previsao_by_id(id):
     res = db.session.execute(f"""
            select
@@ -37,33 +36,6 @@ def get_detalhes_consulta_previsao_by_id(id):
     else:
         return resDict
 
-
-# {
-#     "list": [
-#         {
-#             "dt": 1581368400,
-#             "main": {
-#                 "temp": 28.63,
-#                 "temp_min": 27.11,
-#                 "temp_max": 28.63,
-#                 "humidity": 80,
-#             },
-#             "weather": [
-#                 {
-#                     "description": "nublado",
-#                     "icon": "04d"
-#                 }
-#             ],
-#             "clouds": {
-#                 "all": 100
-#             },
-#             "rain": {
-#                 "3h": 3.63
-#             }
-#             "wind": {
-#                 "speed": 2.08,
-#             },
-#             "dt_txt": "2020-02-10 21:00:00"
 
 # ------------------------------------------------------------------------------------
 # Realiza consulta bruta SQL para retornar as consultas
