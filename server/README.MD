@@ -14,7 +14,7 @@
 Pacotes para instalação estão tanto no Pipfile quanto no
 requirements.txt
 
-### Os principais módulos desta aplicação foram:
+### Os principais módulos utilizados na aplicação foram:
 - Flask - para criação servidor http
 - SQLAlchemy - para fazer o mapeamento objeto relacional (ORM)
 - Flask-SQLAlchemy - middleware para trabalhar com SQLAlchemy
