@@ -20,7 +20,11 @@ const previsaoOWMService = {
     if (!res || res.msg === "erro") return;
     let dados = {};
     dados.cidade = `${res.city.name}, ${res.city.country}`;
-    dados.dt = moment.unix(res.list[0].dt).utcOffset(0).format("LLLL");
+    dados.dt = moment
+      .unix(res.list[0].dt)
+      .utcOffset(0)
+      .format("LLLL");
+    console.log(dados.dt);
     dados.horaSol = { porSol: res.city.sunset, nascerSol: res.city.sunrise };
     dados.weather = {
       icon: res.list[0].weather[0].icon,
@@ -28,8 +32,27 @@ const previsaoOWMService = {
     };
 
     let min = res.list[0].main.temp_min;
-    let max = res.list[0].main.temp_max;
+    let dtMax = moment(res.list[0].dt_txt);
 
+    for (let i = 1; i < res.list.length; i++) {
+      const item = res.list[i];
+      let dtItem = moment(item.dt_txt);
+      if (item.temp_min < min && dtMax.isAfter(dtItem)) {
+        min = item.temp_min;
+      }
+    }
+
+    let max = res.list[0].main.temp_max;
+    for (let i = 1; i < res.list.length; i++) {
+      const item = res.list[i];
+      if (
+        item.temp_max < max &&
+        dtMax.isAfter(moment(item.dt_txt).utcOffset(0))
+      ) {
+        max = item.temp_max;
+      }
+    }
+    debugger;
     dados.temp = { temp: res.list[0].main.temp, tempMin: min, tempMax: max };
     return dados;
   },
@@ -39,9 +62,12 @@ const previsaoOWMService = {
 
     let dados = [];
     // cria data de hoje as 12:00hrs
-    let meio_dia = moment()
-      .utcOffset(0)
-      .set({ hour: 12, minute: 0, millisecond: 0 });
+    let meio_dia = moment().set({
+      hour: 12,
+      minute: 0,
+      second: 0,
+      millisecond: 0
+    });
 
     let now = moment();
     // Se a data atual for maior que meio dia remove ela e adiciona na lista
@@ -60,29 +86,37 @@ const previsaoOWMService = {
     return dados;
   },
   makeDataDetalheDia(res, dia) {
-
-    let dia_m = moment(dia,'YYYY-MM-DD').utcOffset(0);
+    let dia_m = moment(dia, "YYYY-MM-DD").utcOffset(0);
 
     if (!res || res.msg === "erro") return;
     let dados = [];
 
-    res.list.forEach( (item) => {
-      if (moment.unix(item.dt).utcOffset(0).isSame(dia_m, 'day')) {
+    res.list.forEach(item => {
+      if (
+        moment
+          .unix(item.dt)
+          .utcOffset(0)
+          .isSame(dia_m, "day")
+      ) {
         let obj = {};
-        obj.dt = moment.unix(item.dt).utcOffset(0).format("HH:mm");
+        obj.dt = moment
+          .unix(item.dt)
+          .utcOffset(0)
+          .format("HH:mm");
         obj.icon = item.weather[0].icon;
         obj.temp = item.main.temp.toFixed(0);
-        obj.chuva = item.rain ? item.rain['3h'] : 0;
+        obj.chuva = item.rain ? item.rain["3h"] : 0;
         obj.umidade = item.main.humidity;
         obj.vento = item.wind.speed;
         obj.percNuvem = item.clouds.all;
-        obj.condicao_clima = formatarTextoCamelCase(item.weather[0].description)
+        obj.condicao_clima = formatarTextoCamelCase(
+          item.weather[0].description
+        );
         dados.push(obj);
-      } 
-    })
+      }
+    });
 
     return dados;
-
   }
 };
 
@@ -92,7 +126,8 @@ function makePrevisaoData(data) {
   let obj = {};
 
   obj.dia_semana = moment(data.dt_txt)
-    .locale("pt-BR").toDate();
+    .locale("pt-BR")
+    .toDate();
   obj.icon = data.weather[0].icon;
   obj.temp = data.main.temp.toFixed(0);
   obj.condicao_clima = formatarTextoCamelCase(data.weather[0].description);

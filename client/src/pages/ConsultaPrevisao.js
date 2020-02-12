@@ -40,8 +40,6 @@ const useStyles = makeStyles(theme => ({
     flex: "1 0 auto",
     padding: 20
   },
-
-  //WeatherDIa
   root: {
     marginTop: 20
   }

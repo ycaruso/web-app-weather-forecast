@@ -23,7 +23,6 @@ const previsaoService = {
   async obterTodasConsultasPrevisao() {
     try {
       const res = await apiPython.get("/api/previsoes");
-      debugger
       console.log(res);
       return { msg: "sucesso", data: res.data };
     } catch (err) {
@@ -58,14 +57,14 @@ function makeResultModelAPI(resData) {
   data.city = {};
   data.city.name = resData[0].cidade;
   data.city.country = resData[0].sigla;
-  data.city.sunrise = resData[0].dt_nascer_sol;
-  data.city.sunset = resData[0].dt_por_sol;
+  data.city.sunrise = moment(resData[0].dt_nascer_sol).add(3, 'hours').unix();
+  data.city.sunset = moment(resData[0].dt_por_sol).add(3, 'hours').unix();
 
   data.list = [];
 
   resData.forEach(elem => {
     let item = {};
-    item.dt = moment(elem.dt_hora_previsao).unix();
+    item.dt = moment(elem.dt_hora_previsao).add(3, 'hours').unix();
     item.dt_txt = elem.dt_hora_previsao;
     item.main = {};
     item.main.temp = elem.temp_atual;

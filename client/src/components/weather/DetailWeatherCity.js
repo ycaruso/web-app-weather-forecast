@@ -34,7 +34,6 @@ export default function DetailWeatherCity({
   temp
 }) {
   const classes = useStyles();
-
   function componentTempMinMax() {
     return (
       <Fragment>

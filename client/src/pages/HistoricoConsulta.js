@@ -98,16 +98,6 @@ export default function HistoricoConsulta() {
     setDataDetalheDia(dataDetalheDia);
   }
 
-  function componentNoData() {
-    return (
-      <div>
-        <Typography align="center" style={{width: "100%"}}>
-          Não existe consulta de previsões.
-        </Typography>
-      </div>
-    );
-  }
-
   return (
     <div className={classes.html}>
       <CssBaseline />
@@ -148,9 +138,10 @@ export default function HistoricoConsulta() {
                     <TableCell align="right">Por do Sol</TableCell>
                   </TableRow>
                 </TableHead>
-                {historico && !noData && historico.length > 0 ? (
-                  <TableBody>
-                    {historico.map(row => (
+
+                <TableBody>
+                  {historico && !noData && historico.length > 0 ? (
+                    historico.map(row => (
                       <TableRow key={row.id}>
                         <TableCell component="th" scope="row">
                           <Link
@@ -179,11 +170,13 @@ export default function HistoricoConsulta() {
                             .format("HH:mm")}
                         </TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                ) : (
-                  componentNoData()
-                )}
+                    ))
+                  ) : (
+                    <TableRow key={0}>
+                      <TableCell align="center" colSpan={7} component="td">Não foram encontradas consultas :( </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
               </Table>
             </TableContainer>
           </Grid>
