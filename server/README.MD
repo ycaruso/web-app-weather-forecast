@@ -1,17 +1,25 @@
-Servidor Python com banco de dados ORM com SQLAlchemy 
-e api Rest utilizando Flask
+# Servidor Python
 
-Requisitos:
-- Python 3.8 
+### Requisitos:
+- Python 3.8 +
 - Postgres 9.5
 - virtualenv
 
-python -m venv .venv
-pip install pipenv
+### Para Executar o projeto, faça os seguintes passos:
+- pip install pipenv - instalar o pipenv
+- pipenv shell
+- pipenv install - para instalar as dependências do projeto
+- py run.py  
 
 Pacotes para instalação estão tanto no Pipfile quanto no
 requirements.txt
 
-Para Executar basta acessar a pasta do server,
-e digitar:
-> python run.py
+### Os principais módulos utilizados na aplicação foram:
+- Flask - para criação servidor http
+- SQLAlchemy - para fazer o mapeamento objeto relacional (ORM)
+- Flask-SQLAlchemy - middleware para trabalhar com SQLAlchemy
+- Flas-Cors - para conceder acesso e autorização nas rotas
+- Psycopg2 - driver comunicação com banco postgres
+
+Obs: Lembrar de alterar as configs de conexão com o banco no
+arquivo config.py.

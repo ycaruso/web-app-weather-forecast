@@ -4,7 +4,6 @@ from flask_cors import cross_origin
 from .service import insert_consulta_previsao, get_all_consultas_previsao, get_detalhes_consulta_previsao_by_id
 from flask import jsonify
 
-
 """
     Salvar consulta completa da previsão
 """
@@ -43,7 +42,6 @@ def listar_todas_consultas_previsao():
 @cross_origin()
 def listar_detalhes_consulta_previsao_by_id():
     id = request.args['id']
-    # id = request.args.get('id', default=0, type=int)
     res = get_detalhes_consulta_previsao_by_id(id)
     if ("msg" in res):
         return jsonify(res), 400

@@ -3,7 +3,6 @@ from datetime import datetime
 import pytz
 from sqlalchemy import exc
 
-
 def get_detalhes_consulta_previsao_by_id(id):
     res = db.session.execute(f"""
            select
