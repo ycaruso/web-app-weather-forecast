@@ -78,12 +78,12 @@ export default function HistoricoConsulta() {
   }, [fetchData]);
 
   async function handleShowPrevisao(rowid) {
-    console.log(rowid);
+    // console.log(rowid);
     SetLoading(true);
     const res = await previsaoService.obterDetalhesConsultaPorId(rowid);
     setRes(res);
     let dtCity = previsaoOWMService.makeDataCity(res.data);
-    console.log(dtCity);
+    // console.log(dtCity);
     setDataCity(dtCity);
     let data5Dias = previsaoOWMService.makeDataPrevisao5Dias(res.data);
     SetLoading(false);

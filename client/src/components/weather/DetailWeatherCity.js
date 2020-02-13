@@ -79,7 +79,7 @@ export default function DetailWeatherCity({
         </Grid>
         <Grid item>
           <Typography align="left" color="textPrimary" className={classes.temp}>
-            {/* {temp.temp.toFixed(0)}º */}
+            {temp.temp.toFixed(0)}º
           </Typography>
         </Grid>
 

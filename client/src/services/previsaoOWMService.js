@@ -20,7 +20,7 @@ const previsaoOWMService = {
     if (!res || res.msg === "erro") return;
     let dados = {};
     dados.cidade = `${res.city.name}, ${res.city.country}`;
-    dados.dt = moment.unix(res.list[0].dt).utcOffset(0).format("LLLL");
+    dados.dt = moment(res.list[0].dt_txt).format("LLLL");
     dados.horaSol = { porSol: res.city.sunset, nascerSol: res.city.sunrise };
     dados.weather = {
       icon: res.list[0].weather[0].icon,
@@ -46,30 +46,28 @@ const previsaoOWMService = {
     let now = moment();
     // Se a data atual for maior que meio dia remove ela e adiciona na lista
     if (now.isAfter(meio_dia)) {
-      dados.push(makePrevisaoData(res.list.shift()));
+      dados.push(makePrevisaoData(res.list[0]));
     }
 
     // filtra somente os horários das 12hrs
     res.list.filter(
       x =>
-        moment
-          .unix(x.dt)
-          .utc()
+        moment(x.dt_txt)
           .format("HH") === "12" && dados.push(makePrevisaoData(x))
     );
     return dados;
   },
   makeDataDetalheDia(res, dia) {
 
-    let dia_m = moment(dia,'YYYY-MM-DD').utcOffset(0);
+    let dia_m = moment(dia,'YYYY-MM-DD');
 
     if (!res || res.msg === "erro") return;
     let dados = [];
 
     res.list.forEach( (item) => {
-      if (moment.unix(item.dt).utcOffset(0).isSame(dia_m, 'day')) {
+      if (moment(item.dt_txt).isSame(dia_m, 'day')) {
         let obj = {};
-        obj.dt = moment.unix(item.dt).utcOffset(0).format("HH:mm");
+        obj.dt = moment(item.dt_txt).format("HH:mm");
         obj.icon = item.weather[0].icon;
         obj.temp = item.main.temp.toFixed(0);
         obj.chuva = item.rain ? item.rain['3h'] : 0;

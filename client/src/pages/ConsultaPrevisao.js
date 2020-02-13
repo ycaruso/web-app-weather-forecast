@@ -61,22 +61,11 @@ export default function ConsultaPrevisao() {
     setCidade(cidade);
     let res = await previsaoOWMService.getPrevisoesOWM(cidade);
     setRes(res);
-    SetLoading(true);
-    let result = await previsaoService.salvarConsultaPrevisao(res.data);
-    SetLoading(false);
-    if (result.msg === "erro") {
-      console.log(result);
-      _Swal.fire({
-        icon: "error",
-        text: result.err.data !== "undefined" ? result.err.data.msg : result.err
-      });
-      return;
-    } else {
-      _Swal.fire({
-        icon: "success",
-        text: result.data.msg
-      });
-    }
+    await saveDataOnServer(res);
+    makeDataForecast(res);
+  }
+
+  function makeDataForecast(res) {
     // console.log(result);
     if (res.msg === "sucesso") {
       // Informações da cidade
@@ -89,6 +78,26 @@ export default function ConsultaPrevisao() {
       _Swal.fire({
         icon: "error",
         text: res.err
+      });
+    }
+  }
+
+  async function saveDataOnServer(res) {
+    
+    SetLoading(true);
+    let result = await previsaoService.salvarConsultaPrevisao(res.data);
+    SetLoading(false);
+    if (result.msg === "erro") {
+      // console.log(result);
+      _Swal.fire({
+        icon: "error",
+        text: result.err.data !== "undefined" ? result.err.data.msg : result.err
+      });
+      return;
+    } else {
+      _Swal.fire({
+        icon: "success",
+        text: result.data.msg
       });
     }
   }
