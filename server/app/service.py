@@ -1,5 +1,6 @@
 from .models import db, Cidade, Previsao, PrevisaoItem, CondicaoClimatica, Pais
 from datetime import datetime
+import pytz
 from sqlalchemy import exc
 
 
@@ -11,7 +12,8 @@ def get_detalhes_consulta_previsao_by_id(id):
             pa.sigla,
             c.dt_nascer_sol,
             c.dt_por_sol,
-            pit.dt_hora_previsao,
+            pit.dt_hora_previsao::timestamp,
+            pit.dt_hora_dados::timestamp,
             pit.temp_atual,
             pit.temp_min,
             pit.temp_max,
@@ -37,34 +39,6 @@ def get_detalhes_consulta_previsao_by_id(id):
     else:
         return resDict
 
-
-# {
-#     "list": [
-#         {
-#             "dt": 1581368400,
-#             "main": {
-#                 "temp": 28.63,
-#                 "temp_min": 27.11,
-#                 "temp_max": 28.63,
-#                 "humidity": 80,
-#             },
-#             "weather": [
-#                 {
-#                     "description": "nublado",
-#                     "icon": "04d"
-#                 }
-#             ],
-#             "clouds": {
-#                 "all": 100
-#             },
-#             "rain": {
-#                 "3h": 3.63
-#             }
-#             "wind": {
-#                 "speed": 2.08,
-#             },
-#             "dt_txt": "2020-02-10 21:00:00"
-
 # ------------------------------------------------------------------------------------
 # Realiza consulta bruta SQL para retornar as consultas
 # ------------------------------------------------------------------------------------
@@ -79,6 +53,7 @@ def get_all_consultas_previsao():
         from previsao as p
         left join cidade as c on (c.id=p.id_cidade)
         left join pais as pa on (pa.id=c.id_pais)
+        order by id desc
         """)
     
     resDict = resultProxyToDict(res)
@@ -223,7 +198,7 @@ def insert_previsao_itens(res, previsao_ref):
     lista_previsao_item = []
 
     for previsao in res["list"]:
-        previsao_item_ref = PrevisaoItem(datetime.fromtimestamp(previsao['dt']).strftime('%Y-%m-%d %H:%M:%S'),
+        previsao_item_ref = PrevisaoItem(datetime.fromtimestamp(previsao['dt'], tz=pytz.utc).strftime('%Y-%m-%d %H:%M:%S'),
             previsao['main']['temp'],
             previsao['main']['feels_like'],
             previsao['main']['temp_min'],
